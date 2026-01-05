@@ -91,14 +91,14 @@ button{
     display: flex;
     flex-direction: row;
     border-radius: 5px;
-    border: 1px solid #333;
+    border: 1px solid var(--tg-theme-text-color);
     padding-block: 10px;
     padding-inline: 5px;
     column-gap: 10px;
 }
 
 .res-cost{
-    border-left: 1px solid #333;
+    border-left: 1px solid var(--tg-theme-text-color);
     padding-left: 10px;
 }
 
