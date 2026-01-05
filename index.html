@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бот доставки еды</title>
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main>
+    
+    <h1>Меню</h1>
+    <h2>Пиццы</h2>
+    <div class="container">
+        <div class="card">
+            <img src="./images/pizzas/pizza1.png" alt="Пеперони" class="card-image">
+            <h3 class="card-name">Пеперони</h3>
+            <p class="card-cost"><span class="cost-value">15</span> BYN</p>
+            <div class="card-buttons">
+                <button class="inc" value="15">+</button>
+                <p class="card-quantity" id="1">0</p>
+                <button class="dec" value="15">-</button>
+            </div>
+        </div>
+
+        <div class="card last-card">
+            <img src="./images/pizzas/pizza2.png" alt="Четыре сыра" class="card-image">
+            <h3 class="card-name">Четыре сыра</h3>
+            <p class="card-cost"><span class="cost-value">20</span> BYN</p>
+            <div class="card-buttons">
+                <button class="inc" value="20">+</button>
+                <p class="card-quantity" id="1">0</p>
+                <button class="dec" value="20">-</button>
+            </div>
+        </div>
+    </div>
+
+    <h2>Напитки</h2> 
+    <div class="container">
+        <div class="card">
+            <img src="./images/drinks/juice.png" alt="Яблочный сок" class="card-image">
+            <h3 class="card-name">Яблочный сок</h3>
+            <p class="card-cost"><span class="cost-value">5</span> BYN</p>
+            <div class="card-buttons">
+                <button class="inc" value="5">+</button>
+                <p class="card-quantity" id="1">0</p>
+                <button class="dec" value="5">-</button>
+            </div>
+        </div>
+        <div class="card last-card">
+            <img src="./images/drinks/cola.png" alt="Coca Cola" width="100px">
+            <h3 class="card-name">Coca Cola</h3>
+            <p class="card-cost"><span class="cost-value">7</span> BYN</p>
+            <div class="card-buttons">
+                <button class="inc" value="7">+</button>
+                <p class="card-quantity" id="1">0</p>
+                <button class="dec" value="7">-</button>
+            </div>
+        </div>
+    </div>
+
+    <h2>Корзина</h2>
+    <div id="basket" class="last-card">Ничего нету</div>
+    <script src="./script.js"></script>
+
+    <div class="container">
+        <button class="res-but" id="order-button">Перейти к оформлению заказа</button>
+    </div>
+    </main>
+    <script src="https://telegram.org/js/telegram-web-app.js?59"></script>
+</body>
+</html>
