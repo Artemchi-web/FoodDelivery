@@ -74,3 +74,13 @@ document.querySelectorAll(".dec").forEach(button => {
     }
   });
 });
+
+
+// отправка данных боту
+let tg = window.Telegram.WebApp;
+let order_but = document.getElementById("order-button")
+
+order_but.addEventListener("click", () => {
+    tg.sendData(JSON.stringify(cart));
+});
+
