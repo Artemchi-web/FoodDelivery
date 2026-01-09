@@ -81,9 +81,10 @@ let tg = window.Telegram.WebApp;
 let order_but = document.getElementById("order-button")
 
 order_but.addEventListener("click", () => {
-  if (total > 0){
+  if (cart){
     tg.sendData(JSON.stringify(cart));
-  }else{
+  }
+  else{
     alert("В корзине ничего нету")
   }
 });
