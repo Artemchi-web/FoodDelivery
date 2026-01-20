@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donateria - Заказ пончиков</title>
+    <meta name="telegram:viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #fdfcfb 0%, #f5e8d0 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #FF6B8B;
+            border-radius: 20px;
+            color: white;
+            box-shadow: 0 10px 20px rgba(255, 107, 139, 0.2);
+        }
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        .info-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        h2 {
+            color: #FF6B8B;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #FFE5EB;
+            padding-bottom: 8px;
+        }
+        .hours-badge {
+            display: inline-block;
+            background: #E8F5E9;
+            color: #2E7D32;
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-weight: 600;
+            margin: 10px 0;
+            border: 1px solid #C8E6C9;
+        }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .menu-item {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        }
+        .item-img {
+            height: 160px;
+            background: linear-gradient(45deg, #FFD7DE, #FFB6C1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            color: #FF6B8B;
+        }
+        .item-content {
+            padding: 20px;
+        }
+        .item-title {
+            font-weight: 600;
+            font-size: 1.2em;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        .item-price {
+            color: #FF6B8B;
+            font-weight: 700;
+            font-size: 1.3em;
+            margin: 10px 0;
+        }
+        .item-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            background: #F5F5F5;
+            border-radius: 50px;
+            padding: 5px;
+        }
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .quantity {
+            margin: 0 12px;
+            font-weight: 600;
+            min-width: 20px;
+            text-align: center;
+        }
+        .cart {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+            border-top-left-radius: 25px;
+            border-top-right-radius: 25px;
+            z-index: 1000;
+        }
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .cart-count {
+            background: #FF6B8B;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+        }
+        .cart-items {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #EEE;
+        }
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 1.2em;
+            margin: 15px 0;
+        }
+        .btn {
+            background: #FF6B8B;
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 1.1em;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #FF5577;
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(76,175,80,0.3);
+            z-index: 2000;
+            transform: translateY(-100px);
+            transition: transform 0.5s;
+        }
+        .notification.show {
+            transform: translateY(0);
+        }
+        .delivery-info {
+            background: #E3F2FD;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        .order-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+        }
+        .order-content {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 20px;
+            padding: 30px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #DDD;
+            border-radius: 10px;
+            font-size: 1em;
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #999;
+        }
+        @media (max-width: 768px) {
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🍩 Готовим только самые вкусные пончики!</h1>
+            <p class="subtitle">Только натуральные и свежие продукты.</p>
+        </header>
+        
+        <div class="info-section">
+            <h2>📋 Как сделать заказ</h2>
+            <p>Мы работаем <strong>ежедневно с 10:00 до 22:00</strong>. Заказы принимаются через Telegram-бота. Доставка по городу в течение <strong>60 минут</strong>.</p>
+            <div class="hours-badge">🕐 Часы работы: Ежедневно 10:00 - 22:00</div>
+            <div class="delivery-info">
+                🚚 <strong>Быстрая доставка:</strong> Получите ваши пончики в течение часа после заказа!
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <h2>🍩 Наше меню</h2>
+            <div class="menu-grid" id="menuContainer">
+                <!-- Меню будет сгенерировано через JavaScript -->
+            </div>
+        </div>
+        
+        <div class="cart" id="cartSection">
+            <div class="cart-header">
+                <h2>🛒 Ваш заказ</h2>
+                <div class="cart-count" id="cartCount">0</div>
+            </div>
+            <div class="cart-items" id="cartItems">
+                <p id="emptyCartText">Корзина пуста. Добавьте пончики из меню!</p>
+            </div>
+            <div class="cart-total">
+                <span>Итого:</span>
+                <span id="totalPrice">0 ₽</span>
+            </div>
+            <button class="btn" id="checkoutBtn" onclick="openOrderModal()">📦 Оформить заказ</button>
+        </div>
+    </div>
+    
+    <div class="order-modal" id="orderModal">
+        <div class="order-content">
+            <button class="close-modal" onclick="closeOrderModal()">×</button>
+            <h2>📝 Оформление заказа</h2>
+            <div class="form-group">
+                <label>Ваше имя</label>
+                <input type="text" id="customerName" placeholder="Введите ваше имя" required>
+            </div>
+            <div class="form-group">
+                <label>Телефон для связи</label>
+                <input type="tel" id="customerPhone" placeholder="+7 (XXX) XXX-XX-XX" required>
+            </div>
+            <div class="form-group">
+                <label>Адрес доставки</label>
+                <input type="text" id="deliveryAddress" placeholder="Улица, дом, квартира" required>
+            </div>
+            <div class="form-group">
+                <label>Комментарий к заказу</label>
+                <textarea id="orderComment" rows="3" placeholder="Особые пожелания, время доставки и т.д."></textarea>
+            </div>
+            <div class="info-section">
+                <h3>Ваш заказ:</h3>
+                <div id="modalOrderItems"></div>
+                <div class="cart-total">
+                    <span>Итого к оплате:</span>
+                    <span id="modalTotalPrice">0 ₽</span>
+                </div>
+            </div>
+            <button class="btn" onclick="sendOrderToBot()">✅ Отправить заказ в Telegram</button>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">Уведомление</div>
+    
+    <script>
+        // ========== КОНФИГУРАЦИЯ ==========
+        const BOT_TOKEN = 'ВАШ_ТОКЕН_БОТА'; // Замените на реальный токен
+        const CHAT_ID = 'ВАШ_CHAT_ID'; // Замените на реальный chat_id
+        
+        // Данные с сайта Donateria
+        const businessInfo = {
+            name: "Donateria",
+            description: "Готовим только самые вкусные пончики! Только натуральные и свежие продукты.",
+            hours: "Ежедневно 10:00 - 22:00",
+            delivery: "Доставка по городу в течение 60 минут"
+        };
+        
+        // Меню
+        const menuItems = [
+            { id: 1, name: "Классический пончик", price: 120, emoji: "🍩", category: "Пончики" },
+            { id: 2, name: "Шоколадный пончик", price: 140, emoji: "🍫", category: "Пончики" },
+            { id: 3, name: "Пончик с клубникой", price: 150, emoji: "🍓", category: "Пончики" },
+            { id: 4, name: "Пончик с карамелью", price: 145, emoji: "🍯", category: "Пончики" },
+            { id: 5, name: "Кофе латте", price: 180, emoji: "☕", category: "Напитки" },
+            { id: 6, name: "Капучино", price: 170, emoji: "☕", category: "Напитки" },
+            { id: 7, name: "Чай черный", price: 100, emoji: "🍵", category: "Напитки" },
+            { id: 8, name: "Молочный коктейль", price: 200, emoji: "🥤", category: "Напитки" }
+        ];
+        
+        // ========== СОСТОЯНИЕ ПРИЛОЖЕНИЯ ==========
+        let cart = JSON.parse(localStorage.getItem('donateria_cart')) || [];
+        let orderNumber = parseInt(localStorage.getItem('order_number')) || 1000;
+        
+        // ========== ИНИЦИАЛИЗАЦИЯ ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            renderMenu();
+            updateCartDisplay();
+        });
+        
+        // ========== РЕНДЕРИНГ МЕНЮ ==========
+        function renderMenu() {
+            const menuContainer = document.getElementById('menuContainer');
+            menuContainer.innerHTML = '';
+            
+            menuItems.forEach(item => {
+                const cartItem = cart.find(ci => ci.id === item.id);
+                const quantity = cartItem ? cartItem.quantity : 0;
+                
+                const itemElement = document.createElement('div');
+                itemElement.className = 'menu-item';
+                itemElement.innerHTML = `
+                    <div class="item-img">${item.emoji}</div>
+                    <div class="item-content">
+                        <div class="item-title">${item.name}</div>
+                        <div class="item-price">${item.price} ₽</div>
+                        <div class="item-actions">
+                            <div class="quantity-control">
+                                <button class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button>
+                                <span class="quantity" id="quantity-${item.id}">${quantity}</span>
+                                <button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button>
+                            </div>
+                            <button class="btn" style="padding: 10px 20px; font-size: 0.9em;" 
+                                    onclick="addToCart(${item.id})">
+                                Добавить
+                            </button>
+                        </div>
+                    </div>
+                `;
+                menuContainer.appendChild(itemElement);
+            });
+        }
+        
+        // ========== КОРЗИНА ==========
+        function addToCart(itemId) {
+            const item = menuItems.find(i => i.id === itemId);
+            if (!item) return;
+            
+            const existing = cart.find(ci => ci.id === itemId);
+            if (existing) {
+                existing.quantity++;
+            } else {
+                cart.push({
+                    id: item.id,
+                    name: item.name,
+                    price: item.price,
+                    emoji: item.emoji,
+                    quantity: 1
+                });
+            }
+            
+            saveCart();
+            updateCartDisplay();
+            renderMenu();
+            showNotification(`Добавлено: ${item.name}`);
+        }
+        
+        function increaseQuantity(itemId) {
+            const item = cart.find(ci => ci.id === itemId);
+            if (item) {
+                item.quantity++;
+                saveCart();
+                updateCartDisplay();
+                renderMenu();
+            }
+        }
+        
+        function decreaseQuantity(itemId) {
+            const itemIndex = cart.findIndex(ci => ci.id === itemId);
+            if (itemIndex !== -1) {
+                if (cart[itemIndex].quantity > 1) {
+                    cart[itemIndex].quantity--;
+                } else {
+                    cart.splice(itemIndex, 1);
+                }
+                saveCart();
+                updateCartDisplay();
+                renderMenu();
+            }
+        }
+        
+        function saveCart() {
+            localStorage.setItem('donateria_cart', JSON.stringify(cart));
+        }
+        
+        function updateCartDisplay() {
+            // Обновляем счетчик
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = totalItems;
+            
+            // Обновляем список товаров
+            const cartItems = document.getElementById('cartItems');
+            const emptyCartText = document.getElementById('emptyCartText');
+            
+            if (totalItems === 0) {
+                cartItems.innerHTML = '<p id="emptyCartText">Корзина пуста. Добавьте пончики из меню!</p>';
+                document.getElementById('totalPrice').textContent = '0 ₽';
+                document.getElementById('checkoutBtn').disabled = true;
+                return;
+            }
+            
+            document.getElementById('checkoutBtn').disabled = false;
+            emptyCartText?.remove();
+            
+            let itemsHTML = '';
+            let totalPrice = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                totalPrice += itemTotal;
+                
+                itemsHTML += `
+                    <div class="cart-item">
+                        <span>${item.emoji} ${item.name} × ${item.quantity}</span>
+                        <span>${itemTotal} ₽</span>
+                    </div>
+                `;
+            });
+            
+            cartItems.innerHTML = itemsHTML;
+            document.getElementById('totalPrice').textContent = `${totalPrice} ₽`;
+        }
+        
+        function clearCart() {
+            cart = [];
+            saveCart();
+            updateCartDisplay();
+            renderMenu();
+        }
+        
+        // ========== ОФОРМЛЕНИЕ ЗАКАЗА ==========
+        function openOrderModal() {
+            if (cart.length === 0) {
+                showNotification('Добавьте товары в корзину!');
+                return;
+            }
+            
+            // Заполняем информацию о заказе в модальном окне
+            const modalOrderItems = document.getElementById('modalOrderItems');
+            let itemsHTML = '';
+            let totalPrice = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                totalPrice += itemTotal;
+                
+                itemsHTML += `
+                    <div style="display: flex; justify-content: space-between; margin: 8px 0;">
+                        <span>${item.emoji} ${item.name} × ${item.quantity}</span>
+                        <span>${itemTotal} ₽</span>
+                    </div>
+                `;
+            });
+            
+            modalOrderItems.innerHTML = itemsHTML;
+            document.getElementById('modalTotalPrice').textContent = `${totalPrice} ₽`;
+            
+            // Показываем модальное окно
+            document.getElementById('orderModal').style.display = 'flex';
+        }
+        
+        function closeOrderModal() {
+            document.getElementById('orderModal').style.display = 'none';
+        }
+        
+        // ========== ОТПРАВКА В TELEGRAM ==========
+        function sendOrderToBot() {
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+            const address = document.getElementById('deliveryAddress').value.trim();
+            const comment = document.getElementById('orderComment').value.trim();
+            
+            if (!name || !phone || !address) {
+                showNotification('Заполните все обязательные поля!');
+                return;
+            }
+            
+            // Формируем номер заказа
+            orderNumber++;
+            localStorage.setItem('order_number', orderNumber.toString());
+            
+            // Формируем сообщение для Telegram
+            let message = `📦 *НОВЫЙ ЗАКАЗ #${orderNumber}*\\n`;
+            message += `\\n👤 *Клиент:* ${name}`;
+            message += `\\n📱 *Телефон:* ${phone}`;
+            message += `\\n📍 *Адрес:* ${address}`;
+            if (comment) message += `\\n📝 *Комментарий:* ${comment}`;
+            
+            message += `\\n\\n🛒 *Состав заказа:*`;
+            
+            let totalPrice = 0;
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                totalPrice += itemTotal;
+                message += `\\n${index + 1}. ${item.emoji} ${item.name} - ${item.quantity} × ${item.price} ₽ = ${itemTotal} ₽`;
+            });
+            
+            message += `\\n\\n💰 *Итого:* ${totalPrice} ₽`;
+            message += `\\n\\n⏰ *Время заказа:* ${new Date().toLocaleString('ru-RU')}`;
+            message += `\\n📋 *Информация с сайта:*`;
+            message += `\\n${businessInfo.description}`;
+            message += `\\n⏳ ${businessInfo.hours}`;
+            message += `\\n🚚 ${businessInfo.delivery}`;
+            message += `\\n\\n🆔 *ID заказа:* ${Date.now()}`;
+            
+            // Кодируем сообщение для URL
+            const encodedMessage = encodeURIComponent(message);
+            
+            // Отправляем в Telegram через Bot API
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodedMessage}&parse_mode=Markdown`;
+            
+            // Показываем индикатор загрузки
+            const sendBtn = document.querySelector('#orderModal .btn');
+            const originalText = sendBtn.textContent;
+            sendBtn.textContent = '⏳ Отправка...';
+            sendBtn.disabled = true;
+            
+            // Отправляем запрос
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        showNotification('✅ Заказ успешно отправлен!');
+                        closeOrderModal();
+                        clearCart();
+                        
+                        // Можно также показать подтверждение клиенту
+                        const confirmation = `Спасибо за заказ! Ваш заказ #${orderNumber} принят. Мы свяжемся с вами в течение 5 минут.`;
+                        if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+                            Telegram.WebApp.sendData(JSON.stringify({
+                                orderId: orderNumber,
+                                message: confirmation
+                            }));
+                        }
+                    } else {
+                        throw new Error(data.description || 'Ошибка отправки');
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                    showNotification('❌ Ошибка отправки заказа');
+                    
+                    // Альтернативный способ: показываем ссылку для отправки вручную
+                    const manualUrl = `https://t.me/share/url?url=${encodeURIComponent('Новый заказ с Donateria')}&text=${encodeURIComponent(message)}`;
+                    if (confirm('Не удалось отправить автоматически. Хотите отправить заказ вручную?')) {
+                        window.open(manualUrl, '_blank');
+                    }
+                })
+                .finally(() => {
+                    sendBtn.textContent = originalText;
+                    sendBtn.disabled = false;
+                });
+        }
+        
+        // ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
+        function showNotification(text, duration = 3000) {
+            const notification = document.getElementById('notification');
+            notification.textContent = text;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, duration);
+        }
+        
+        // ========== ИНТЕГРАЦИЯ С TELEGRAM MINI APP ==========
+        if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+            // Инициализация Telegram WebApp
+            Telegram.WebApp.ready();
+            Telegram.WebApp.expand();
+            
+            // Получаем данные пользователя Telegram
+            const user = Telegram.WebApp.initDataUnsafe.user;
+            if (user) {
+                // Автозаполнение данных пользователя
+                document.getElementById('customerName').value = `${user.first_name || ''} ${user.last_name || ''}`.trim();
+                
+                // Можно также использовать user.username или user.id
+            }
+            
+            // Изменяем тему под Telegram
+            document.body.style.backgroundColor = Telegram.WebApp.backgroundColor;
+        }
+        
+        // ========== ЭКСПОРТ ДЛЯ ГЛОБАЛЬНОГО ДОСТУПА ==========
+        window.addToCart = addToCart;
+        window.increaseQuantity = increaseQuantity;
+        window.decreaseQuantity = decreaseQuantity;
+        window.openOrderModal = openOrderModal;
+        window.closeOrderModal = closeOrderModal;
+        window.sendOrderToBot = sendOrderToBot;
+    </script>
+</body>
+</html>
